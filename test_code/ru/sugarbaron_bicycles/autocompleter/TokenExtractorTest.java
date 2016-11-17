@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import java.io.FileInputStream;
 import java.io.IOException;
+import ru.sugarbaron_bicycles.autocompleter.exceptions.WrongIncomingDataFormat;
 
 public final class TokenExtractorTest {
     @Test
@@ -61,6 +62,72 @@ public final class TokenExtractorTest {
 
         String prefix3 = extractor.nextTokenAsText();
         assertTrue( prefix3.equals("kar") );
+        return;
+    }
+
+    @Test
+    public void nextTokenAsText() throws IOException {
+        try ( FileInputStream input = new FileInputStream("test_data/singleTextTokenCase.in") ) {
+            tryToExtractTextToken(input);
+        }
+        return;
+    }
+
+    @Test
+    public void nextTokenAsText_noNewLine() throws IOException {
+        try ( FileInputStream in = new FileInputStream("test_data/noNewLineAfterTextCase.in") ) {
+            tryToExtractTextToken(in);
+        }
+        return;
+    }
+
+    @Test(expected = WrongIncomingDataFormat.class)
+    public void nextTokenAsText_endOfStream() throws IOException {
+        try ( FileInputStream input = new FileInputStream("test_data/endOfStreamCase.in") ) {
+            tryToExtractTextToken(input);
+        }
+        return;
+    }
+
+    private void tryToExtractTextToken(FileInputStream input) throws IOException {
+        TokenExtractor extractor = new TokenExtractor(input);
+
+        String token = extractor.nextTokenAsText();
+
+        assertTrue( token.equals("metallica") );
+        return;
+    }
+
+    @Test
+    public void nextTokenAsNumber() throws IOException {
+        try ( FileInputStream input = new FileInputStream("test_data/singleNumericTokenCase.in") ) {
+            tryToExtractNumericToken(input);
+        }
+        return;
+    }
+
+    @Test
+    public void nextTokenAsNumber_noNewLine() throws IOException {
+        try ( FileInputStream input = new FileInputStream("test_data/noNewLineAfterNumCase.in") ) {
+            tryToExtractNumericToken(input);
+        }
+        return;
+    }
+
+    @Test(expected = WrongIncomingDataFormat.class)
+    public void nextTokenAsNumber_endOfStream() throws IOException {
+        try ( FileInputStream input = new FileInputStream("test_data/endOfStreamCase.in") ) {
+            tryToExtractNumericToken(input);
+        }
+        return;
+    }
+
+    private void tryToExtractNumericToken(FileInputStream in) throws IOException {
+        TokenExtractor extractor = new TokenExtractor(in);
+
+        int token = extractor.nextTokenAsNumber();
+
+        assertTrue( token == 5 );
         return;
     }
 }

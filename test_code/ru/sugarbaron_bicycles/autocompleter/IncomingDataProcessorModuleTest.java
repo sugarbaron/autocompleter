@@ -60,12 +60,6 @@ public final class IncomingDataProcessorModuleTest {
     }
 
     @Test(expected = WrongIncomingDataFormat.class)
-    public void readIncomingData_frequencyIsOutOfRange() {
-        readInputFromFile("frequencyIsOutOfRangeCase.in");
-        return;
-    }
-
-    @Test(expected = WrongIncomingDataFormat.class)
     public void readIncomingData_spacesAfterFrequency() {
         readInputFromFile("spacesAfterFrequencyCase.in");
         return;
